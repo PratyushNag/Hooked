@@ -1,0 +1,54 @@
+[project]
+name = "hooked"
+version = "0.1.0"
+description = "PR Autopilot MVP for GitHub pull request notifications"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.16.0",
+    "apscheduler>=3.11.0",
+    "httpx>=0.28.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "pyyaml>=6.0.0",
+    "openai>=2.0.0",
+    "PyJWT>=2.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+    "app",
+    "app.api",
+    "app.api.routes",
+    "app.config",
+    "app.core",
+    "app.core.domain",
+    "app.core.ports",
+    "app.core.rules",
+    "app.core.services",
+    "app.integrations",
+    "app.integrations.github",
+    "app.integrations.llm",
+    "app.integrations.notifier",
+    "app.integrations.persistence",
+    "app.integrations.queue",
+    "app.integrations.scheduler",
+    "app.workers",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

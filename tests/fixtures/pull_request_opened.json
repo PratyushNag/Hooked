@@ -1,0 +1,13 @@
+{
+  "action": "opened",
+  "repository": {
+    "full_name": "demo/hooked-demo",
+    "html_url": "https://github.com/demo/hooked-demo"
+  },
+  "pull_request": {
+    "number": 42,
+    "head": {
+      "sha": "abc123"
+    }
+  }
+}

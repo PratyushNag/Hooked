@@ -1,0 +1,100 @@
+app:
+  environment: local
+  log_level: INFO
+  base_url: http://localhost:8000
+
+github:
+  mode: pat
+  repository_scope: configured
+  api_base_url: https://api.github.com
+  webhook_secret_env: GITHUB_WEBHOOK_SECRET
+  pat_env: GITHUB_TOKEN
+  app:
+    app_id_env: GITHUB_APP_ID
+    private_key_env: GITHUB_APP_PRIVATE_KEY
+    webhook_secret_env: GITHUB_WEBHOOK_SECRET
+
+llm:
+  enabled: true
+  provider: openai
+  model: gpt-4.1-mini
+  api_key_env: OPENAI_API_KEY
+  timeout_seconds: 12
+  max_input_chars: 12000
+  max_output_chars: 1200
+
+notifier:
+  provider: runbear
+  runbear:
+    api_key_env: RUNBEAR_API_KEY
+    webhook_url_env: RUNBEAR_WEBHOOK_URL
+    base_url: https://api.runbear.io
+    workspace_id: demo-workspace
+    destination_id: engineering-prs
+    thread_mode: per_pr
+
+defaults:
+  large_pr_files_threshold: 20
+  large_pr_lines_threshold: 800
+  default_nudge_after_hours: 24
+  urgent_nudge_after_hours: 4
+  scan_interval_minutes: 15
+  ci_failure_cooldown_minutes: 30
+  max_nudges_per_day_per_pr: 2
+  recent_contributor_commit_window: 50
+  mention_suggested_reviewer_on_nudge: true
+
+repos:
+  - full_name: owner/repo-a
+    enabled: true
+    critical_paths:
+      - auth/**
+      - payments/**
+      - infra/**
+      - migrations/**
+    test_paths:
+      - test/**
+      - tests/**
+      - __tests__/**
+    team_map:
+      "src/payments/**":
+        - alice
+        - bob
+      "src/auth/**":
+        - carol
+    destinations:
+      pr_brief: engineering-prs
+      ci_failure: engineering-prs
+      review_nudge: engineering-prs
+  - full_name: owner/frontend-*
+    enabled: true
+    critical_paths:
+      - auth/**
+      - payments/**
+    test_paths:
+      - test/**
+      - tests/**
+      - __tests__/**
+    team_map:
+      "src/**":
+        - frontend-lead
+    destinations:
+      pr_brief: frontend-prs
+      ci_failure: frontend-prs
+      review_nudge: frontend-prs
+  - full_name: "*"
+    enabled: true
+    critical_paths:
+      - auth/**
+      - payments/**
+      - infra/**
+      - migrations/**
+    test_paths:
+      - test/**
+      - tests/**
+      - __tests__/**
+    team_map: {}
+    destinations:
+      pr_brief: general-prs
+      ci_failure: general-ci
+      review_nudge: general-reviews
